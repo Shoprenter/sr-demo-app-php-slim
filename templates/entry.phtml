@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Slim 3</title>
+    <link href='//fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+    <style>
+        body {
+            background-color: white;
+            margin: 50px 0 0 0;
+            padding: 0;
+            width: 100%;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: #aaa;
+            font-size: 18px;
+            text-align: center;
+        }
+        h1 {
+            color: #719e40;
+            letter-spacing: -3px;
+            font-family: 'Lato', sans-serif;
+            font-size: 100px;
+            font-weight: 200;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Demo app</h1>
+
+    <button id="pay_reccuring">Recurring Fizetés</button>
+    <button id="pay_one_time">One Time Fizetés</button>
+
+    <script>
+        //RECURRING PAYMENT
+        let $payRecurring = document.getElementById('pay_reccuring');
+
+        $payRecurring.addEventListener('click', async () => {
+            const response = await fetch('/start_recurring_charge?shopName=<?=$shopName?>', {
+                method: 'GET'
+            });
+
+            const charge = await response.json();
+
+            if (charge.confirmationUrl !== undefined) {
+                window.top.location.href = charge.confirmationUrl;
+            }
+
+            $payRecurring.innerHTML = "YOU CLICKED ME!";
+        });
+
+        //ONE TIME CHARGING
+        let $payOneTime = document.getElementById('pay_one_time');
+
+        $payOneTime.addEventListener('click', async () => {
+            const response = await fetch('/start_one_time_charge?shopName=<?=$shopName?>', {
+                method: 'GET'
+            });
+
+            const charge = await response.json();
+
+            if (charge.confirmationUrl !== undefined) {
+                window.top.location.href = charge.confirmationUrl;
+            }
+
+            $payOneTime.innerHTML = "YOU CLICKED ME!";
+        });
+    </script>
+
+</body>
+</html>
